@@ -1,4 +1,4 @@
-package com.corekcioglu.donut.example;
+package com.corekcioglu.donut.example.service;
 
 import com.corekcioglu.donut.core.Donut;
 

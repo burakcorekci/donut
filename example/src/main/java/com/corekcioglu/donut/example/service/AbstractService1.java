@@ -1,4 +1,4 @@
-package com.corekcioglu.donut.example;
+package com.corekcioglu.donut.example.service;
 
 public abstract class AbstractService1 {
     abstract void sayHello();

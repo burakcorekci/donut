@@ -8,16 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.ExecutableType;
-import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes("com.corekcioglu.donut.core.Donut")
@@ -26,6 +25,7 @@ import javax.tools.JavaFileObject;
 public class DonutAnnotationProcessor extends AbstractProcessor {
 
     protected static final Map<String, String> nameToMainName = new HashMap<>();
+    protected static final Map<String, String> mainNameToConstructor = new HashMap<>();
     protected static final Map<String, List<String>> dependencies = new HashMap<>();
     protected static final List<String> order = new ArrayList<>();
     protected static String packageName;
@@ -33,13 +33,20 @@ public class DonutAnnotationProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         for (TypeElement annotation : annotations) {
-            Set<TypeElement> annotatedElements = roundEnv
-                    .getElementsAnnotatedWith(annotation).stream()
-                    .map(element -> (TypeElement) element)
-                    .collect(Collectors.toSet());
-            for (TypeElement annotatedClass : annotatedElements) {
-                determineNames(annotatedClass);
-                determineConstructorArguments(annotatedClass);
+            Set<? extends Element> annotatedElements = roundEnv
+                    .getElementsAnnotatedWith(annotation);
+            for (Element annotatedElement : annotatedElements) {
+                ElementKind kind = annotatedElement.getKind();
+                ElementProcessor processor = ElementProcessor.get(kind);
+
+                List<String> names = processor.determineNames(annotatedElement);
+                String mainName = names.get(0);
+                names.forEach(name -> nameToMainName.put(name, mainName));
+
+                List<String> arguments = processor.determineDependencies(annotatedElement);
+                dependencies.put(mainName, arguments);
+
+                mainNameToConstructor.put(mainName, processor.getConstructor(annotatedElement));
             }
             determineInitializationOrder();
             determineMainPackage();
@@ -50,30 +57,6 @@ public class DonutAnnotationProcessor extends AbstractProcessor {
             }
         }
         return true;
-    }
-
-    private void determineConstructorArguments(TypeElement annotatedClass) {
-        ExecutableType constructor = (ExecutableType) annotatedClass.getEnclosedElements().stream()
-                .filter(element -> element.getSimpleName().contentEquals("<init>"))
-                .findFirst().get().asType();
-        List<String> arguments = constructor.getParameterTypes().stream()
-                .map(TypeMirror::toString).collect(Collectors.toList());
-
-        String mainName = annotatedClass.asType().toString();
-        dependencies.put(mainName, arguments);
-    }
-
-    private void determineNames(TypeElement annotatedClass) {
-        List<String> names = new ArrayList<>();
-        names.add(annotatedClass.asType().toString());
-        annotatedClass.getInterfaces().forEach(inter -> names.add(inter.toString()));
-        String superClassName = annotatedClass.getSuperclass().toString();
-        if (!superClassName.equals("java.lang.Object")) {
-            names.add(superClassName);
-        }
-
-        String mainName = names.get(0);
-        names.forEach(name -> nameToMainName.put(name, mainName));
     }
 
     private void determineInitializationOrder() {
@@ -130,8 +113,9 @@ public class DonutAnnotationProcessor extends AbstractProcessor {
             order.forEach(mainName -> {
                 out.print("\t\tmainNameToDonut.put(\"");
                 out.print(mainName);
-                out.print("\", new ");
-                out.print(mainName);
+                out.print("\", ");
+
+                out.print(mainNameToConstructor.get(mainName));
                 out.print("(");
 
                 List<String> dependencyList = dependencies.get(mainName);
@@ -144,7 +128,8 @@ public class DonutAnnotationProcessor extends AbstractProcessor {
                         out.print(", ");
                     }
                 }
-                out.println("));");
+                out.print(")");
+                out.println(");");
             });
 
             out.println("\t}");
