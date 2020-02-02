@@ -1,14 +1,27 @@
 package com.corekcioglu.donut.core.processor;
 
+import com.corekcioglu.donut.core.DonutFactory;
+import com.corekcioglu.donut.core.generator.AccessModifier;
+import com.corekcioglu.donut.core.generator.GetDonutStatement;
+import com.corekcioglu.donut.core.generator.JClass;
+import com.corekcioglu.donut.core.generator.JMethod;
+import com.corekcioglu.donut.core.generator.MainNameToDonutPutStatement;
+import com.corekcioglu.donut.core.generator.NameToMainNamePutStatement;
 import com.corekcioglu.donut.core.processor.element.ElementProcessor;
 import com.google.auto.service.AutoService;
+import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -74,67 +87,21 @@ public class DonutAnnotationProcessor extends AbstractProcessor {
     }
 
     private void determineMainPackage() {
+        // TODO: Update determineMainPackage method.
         packageName = "com.corekcioglu.donut.example";
     }
 
     private void createDonutFactoryImplementation() throws IOException {
         String donutFactoryImplementationSimpleName = "GeneratedDonutFactory";
-        String donutFactoryImplementationName =
-                packageName + "." + donutFactoryImplementationSimpleName;
+
+        JClass generatedDonutFactory = DonutFactoryGenerator
+                .generate(packageName, donutFactoryImplementationSimpleName, nameToMainName,
+                        mainNameToConstructor, dependencies, order);
 
         JavaFileObject donutFactoryImplementationFile = processingEnv.getFiler()
-                .createSourceFile(donutFactoryImplementationName);
+                .createSourceFile(packageName + "." + donutFactoryImplementationSimpleName);
         try (PrintWriter out = new PrintWriter(donutFactoryImplementationFile.openWriter())) {
-
-            if (packageName != null) {
-                out.print("package ");
-                out.print(packageName);
-                out.println(";");
-                out.println();
-            }
-
-            out.println("import com.corekcioglu.donut.core.DonutFactory;");
-            out.println();
-
-            out.print("public class ");
-            out.print(donutFactoryImplementationSimpleName);
-            out.println(" extends DonutFactory {");
-            out.println("\t");
-
-            out.println("\tprotected void initializeDonuts() {");
-
-            nameToMainName.keySet().forEach(name -> {
-                out.print("\t\tnameToMainName.put(\"");
-                out.print(name);
-                out.print("\", \"");
-                out.print(nameToMainName.get(name));
-                out.println("\");");
-            });
-            out.println("\t\t");
-            order.forEach(mainName -> {
-                out.print("\t\tmainNameToDonut.put(\"");
-                out.print(mainName);
-                out.print("\", ");
-
-                out.print(mainNameToConstructor.get(mainName));
-                out.print("(");
-
-                List<String> dependencyList = dependencies.get(mainName);
-                for (int i = 0; i < dependencyList.size(); ++i) {
-                    String dependencyName = dependencyList.get(i);
-                    out.print("getDonut(");
-                    out.print(dependencyName);
-                    out.print(".class)");
-                    if (i != dependencyList.size() - 1) {
-                        out.print(", ");
-                    }
-                }
-                out.print(")");
-                out.println(");");
-            });
-
-            out.println("\t}");
-            out.println("}");
+            generatedDonutFactory.generateLines().forEach(out::print);
         }
     }
 }
