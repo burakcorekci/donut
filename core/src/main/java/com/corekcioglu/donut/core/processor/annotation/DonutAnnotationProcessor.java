@@ -1,4 +1,4 @@
-package com.corekcioglu.donut.core.processor;
+package com.corekcioglu.donut.core.processor.annotation;
 
 import com.corekcioglu.donut.core.generator.DonutFactoryGenerator;
 import com.corekcioglu.donut.core.generator.model.JClass;
