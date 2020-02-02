@@ -23,6 +23,6 @@ public class DonutManager {
     }
 
     public <T> T getDonut(Class<T> tClass) {
-        return tClass.cast(donutFactory.getDonut(tClass));
+        return donutFactory.getDonut(tClass);
     }
 }
