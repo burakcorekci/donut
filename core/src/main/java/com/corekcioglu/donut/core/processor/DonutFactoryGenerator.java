@@ -2,12 +2,12 @@ package com.corekcioglu.donut.core.processor;
 
 import com.corekcioglu.donut.core.DonutFactory;
 import com.corekcioglu.donut.core.generator.AccessModifier;
-import com.corekcioglu.donut.core.generator.EmptyStatement;
-import com.corekcioglu.donut.core.generator.GetDonutStatement;
+import com.corekcioglu.donut.core.generator.statement.EmptyStatement;
+import com.corekcioglu.donut.core.generator.statement.GetDonutStatement;
 import com.corekcioglu.donut.core.generator.JClass;
 import com.corekcioglu.donut.core.generator.JMethod;
-import com.corekcioglu.donut.core.generator.MainNameToDonutPutStatement;
-import com.corekcioglu.donut.core.generator.NameToMainNamePutStatement;
+import com.corekcioglu.donut.core.generator.statement.MainNameToDonutPutStatement;
+import com.corekcioglu.donut.core.generator.statement.NameToMainNamePutStatement;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

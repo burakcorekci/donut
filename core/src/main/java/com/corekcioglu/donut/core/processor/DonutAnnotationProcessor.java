@@ -1,27 +1,15 @@
 package com.corekcioglu.donut.core.processor;
 
-import com.corekcioglu.donut.core.DonutFactory;
-import com.corekcioglu.donut.core.generator.AccessModifier;
-import com.corekcioglu.donut.core.generator.GetDonutStatement;
 import com.corekcioglu.donut.core.generator.JClass;
-import com.corekcioglu.donut.core.generator.JMethod;
-import com.corekcioglu.donut.core.generator.MainNameToDonutPutStatement;
-import com.corekcioglu.donut.core.generator.NameToMainNamePutStatement;
 import com.corekcioglu.donut.core.processor.element.ElementProcessor;
 import com.google.auto.service.AutoService;
-import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;

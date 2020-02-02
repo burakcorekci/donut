@@ -1,5 +1,6 @@
 package com.corekcioglu.donut.core.generator;
 
+import com.corekcioglu.donut.core.generator.statement.EmptyStatement;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
