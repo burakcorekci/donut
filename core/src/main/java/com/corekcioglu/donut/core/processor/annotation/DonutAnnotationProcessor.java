@@ -1,6 +1,7 @@
 package com.corekcioglu.donut.core.processor.annotation;
 
 import com.corekcioglu.donut.core.generator.DonutFactoryGenerator;
+import com.corekcioglu.donut.core.generator.DonutManagerGenerator;
 import com.corekcioglu.donut.core.generator.model.JClass;
 import com.corekcioglu.donut.core.processor.element.ElementProcessor;
 import com.google.auto.service.AutoService;
@@ -91,6 +92,14 @@ public class DonutAnnotationProcessor extends AbstractProcessor {
                 .createSourceFile(packageName + "." + donutFactoryImplementationSimpleName);
         try (PrintWriter out = new PrintWriter(donutFactoryImplementationFile.openWriter())) {
             generatedDonutFactory.generateLines().forEach(out::print);
+        }
+
+        String donutManageFileName = "DonutManager";
+        JavaFileObject donutManagerFile = processingEnv.getFiler()
+                .createSourceFile(packageName + "." + donutManageFileName);
+        JClass donutManager = DonutManagerGenerator.generate(packageName);
+        try (PrintWriter out = new PrintWriter(donutManagerFile.openWriter())) {
+            donutManager.generateLines().forEach(out::print);
         }
     }
 }

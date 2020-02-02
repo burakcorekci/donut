@@ -1,6 +1,5 @@
 package com.corekcioglu.donut.core.generator.model;
 
-import com.corekcioglu.donut.core.generator.model.statement.EmptyStatement;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
@@ -12,11 +11,13 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 public class JMethod extends JElement {
+    @Builder.Default
+    private boolean isConstructor = false;
     private String returnType;
     @Builder.Default
     private List<Argument> arguments = new ArrayList<>();
     @Builder.Default
-    private List<JStatement> statements = new ArrayList<>();
+    private JCodeBlock block = new JCodeBlock();
 
     @Override
     public List<String> generateLines() {
@@ -33,9 +34,12 @@ public class JMethod extends JElement {
             builder.append(STATIC);
         }
 
-        builder.append(returnType)
-                .append(SPACE)
-                .append(getName())
+        if (!isConstructor()) {
+            builder.append(returnType)
+                    .append(SPACE);
+        }
+
+        builder.append(getName())
                 .append(OPENING_BRACKET);
 
         for (int i = 0; i < getArguments().size(); ++i) {
@@ -53,23 +57,12 @@ public class JMethod extends JElement {
                 .append(NEW_LINE);
         lines.add(builder.toString());
 
-        for (JStatement statement : getStatements()) {
-            if (statement.getClass() == EmptyStatement.class) {
-                lines.add(TAB + NEW_LINE);
-            } else {
-                lines.add(TAB + statement.generateLines().get(0) + SEMICOLON);
-            }
+        for (String line : block.generateLines()) {
+            lines.add(TAB + line);
         }
 
         lines.add(CLOSING_CURLY + NEW_LINE);
 
         return lines;
-    }
-
-    @Builder
-    @Data
-    public static class Argument {
-        private String type;
-        private String name;
     }
 }

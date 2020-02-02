@@ -40,7 +40,8 @@ public class JClass extends JElement {
         importedClassNames.add(extendedClassName);
         importedClassNames.addAll(implementedClassNames);
         importedClassNames.forEach(importedClassName ->
-                lines.add(IMPORT + importedClassName + SEMICOLON + NEW_LINE));
+                lines.add(IMPORT + importedClassName + SEMICOLON));
+        lines.add(NEW_LINE);
 
         StringBuilder builder = new StringBuilder();
         builder.append(getAccessModifier())
@@ -88,6 +89,7 @@ public class JClass extends JElement {
             for (String str : strs) {
                 lines.add(TAB + str);
             }
+            lines.add(NEW_LINE);
         }
 
         lines.add(CLOSING_CURLY);

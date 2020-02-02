@@ -1,12 +1,13 @@
 package com.corekcioglu.donut.core.generator.model;
 
-import com.corekcioglu.donut.core.generator.model.AccessModifier;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
+@NoArgsConstructor
 @SuperBuilder
 public abstract class JElement {
     protected static final String QUOTATION = "\"";
@@ -22,13 +23,26 @@ public abstract class JElement {
     protected static final String STATIC = "static ";
     protected static final String ABSTRACT = "abstract ";
 
-    private String name;
+    protected String name;
     @Builder.Default
-    private AccessModifier accessModifier = AccessModifier.PRIVATE;
+    protected AccessModifier accessModifier = AccessModifier.PRIVATE;
     @Builder.Default
-    private boolean isStatic = false;
+    protected boolean isStatic = false;
     @Builder.Default
-    private boolean isAbstract = false;
+    protected boolean isAbstract = false;
 
     public abstract List<String> generateLines();
+
+    protected String createCommaSeparatedString(List<String> list) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < list.size(); ++i) {
+            builder.append(list.get(i));
+            if (i != list.size() - 1) {
+                builder.append(COMMA);
+            }
+        }
+
+        return builder.toString();
+    }
 }
