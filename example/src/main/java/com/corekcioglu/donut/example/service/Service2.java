@@ -1,6 +1,6 @@
 package com.corekcioglu.donut.example.service;
 
-import com.corekcioglu.donut.core.Donut;
+import com.corekcioglu.donut.core.annotation.Donut;
 import java.time.LocalDate;
 
 @Donut(name = "deneme")

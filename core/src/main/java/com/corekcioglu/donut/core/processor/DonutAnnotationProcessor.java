@@ -1,5 +1,6 @@
-package com.corekcioglu.donut.core;
+package com.corekcioglu.donut.core.processor;
 
+import com.corekcioglu.donut.core.processor.element.ElementProcessor;
 import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,7 +20,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
-@SupportedAnnotationTypes("com.corekcioglu.donut.core.Donut")
+@SupportedAnnotationTypes("com.corekcioglu.donut.core.annotation.Donut")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @AutoService(Processor.class)
 public class DonutAnnotationProcessor extends AbstractProcessor {
