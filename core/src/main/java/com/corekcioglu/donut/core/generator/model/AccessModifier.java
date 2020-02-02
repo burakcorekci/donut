@@ -1,4 +1,4 @@
-package com.corekcioglu.donut.core.generator;
+package com.corekcioglu.donut.core.generator.model;
 
 public enum AccessModifier {
     PUBLIC("public"),

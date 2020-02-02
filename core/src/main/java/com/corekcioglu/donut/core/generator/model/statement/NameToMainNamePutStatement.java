@@ -1,6 +1,6 @@
-package com.corekcioglu.donut.core.generator.statement;
+package com.corekcioglu.donut.core.generator.model.statement;
 
-import com.corekcioglu.donut.core.generator.JStatement;
+import com.corekcioglu.donut.core.generator.model.JStatement;
 import java.util.Collections;
 import java.util.List;
 import lombok.Data;

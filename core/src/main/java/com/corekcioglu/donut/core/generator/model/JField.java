@@ -1,4 +1,4 @@
-package com.corekcioglu.donut.core.generator;
+package com.corekcioglu.donut.core.generator.model;
 
 import java.util.Collections;
 import java.util.List;

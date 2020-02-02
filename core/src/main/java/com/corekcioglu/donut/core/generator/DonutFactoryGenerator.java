@@ -1,13 +1,13 @@
-package com.corekcioglu.donut.core.processor;
+package com.corekcioglu.donut.core.generator;
 
 import com.corekcioglu.donut.core.DonutFactory;
-import com.corekcioglu.donut.core.generator.AccessModifier;
-import com.corekcioglu.donut.core.generator.statement.EmptyStatement;
-import com.corekcioglu.donut.core.generator.statement.GetDonutStatement;
-import com.corekcioglu.donut.core.generator.JClass;
-import com.corekcioglu.donut.core.generator.JMethod;
-import com.corekcioglu.donut.core.generator.statement.MainNameToDonutPutStatement;
-import com.corekcioglu.donut.core.generator.statement.NameToMainNamePutStatement;
+import com.corekcioglu.donut.core.generator.model.AccessModifier;
+import com.corekcioglu.donut.core.generator.model.JClass;
+import com.corekcioglu.donut.core.generator.model.JMethod;
+import com.corekcioglu.donut.core.generator.model.statement.EmptyStatement;
+import com.corekcioglu.donut.core.generator.model.statement.GetDonutStatement;
+import com.corekcioglu.donut.core.generator.model.statement.MainNameToDonutPutStatement;
+import com.corekcioglu.donut.core.generator.model.statement.NameToMainNamePutStatement;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.corekcioglu.donut.core.generator;
+package com.corekcioglu.donut.core.generator.model;
 
-import com.corekcioglu.donut.core.generator.AccessModifier;
+import com.corekcioglu.donut.core.generator.model.AccessModifier;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;

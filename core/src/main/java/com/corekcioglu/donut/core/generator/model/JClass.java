@@ -1,4 +1,4 @@
-package com.corekcioglu.donut.core.generator;
+package com.corekcioglu.donut.core.generator.model;
 
 import static java.util.Objects.nonNull;
 

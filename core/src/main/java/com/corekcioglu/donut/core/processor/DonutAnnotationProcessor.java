@@ -1,6 +1,7 @@
 package com.corekcioglu.donut.core.processor;
 
-import com.corekcioglu.donut.core.generator.JClass;
+import com.corekcioglu.donut.core.generator.DonutFactoryGenerator;
+import com.corekcioglu.donut.core.generator.model.JClass;
 import com.corekcioglu.donut.core.processor.element.ElementProcessor;
 import com.google.auto.service.AutoService;
 import java.io.IOException;
