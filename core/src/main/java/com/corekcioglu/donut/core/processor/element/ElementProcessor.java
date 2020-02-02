@@ -1,32 +1,28 @@
 package com.corekcioglu.donut.core.processor.element;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 
 public interface ElementProcessor<T extends Element> {
-    Map<ElementKind, ElementProcessor> processors = new ConcurrentHashMap<>();
+    Map<ElementKind, ElementProcessor> processors = new HashMap<>();
 
     List<String> determineNames(T element);
     List<String> determineDependencies(T element);
     String getConstructor(T element);
 
-    static ElementProcessor get(ElementKind elementKind) {
+    static <T extends Element> ElementProcessor<T> get(ElementKind elementKind) {
         return processors.computeIfAbsent(elementKind, kind -> {
-            ElementProcessor processor;
             switch (kind) {
                 case CLASS:
-                    processor = new TypeElementProcessor();
-                    break;
+                    return new TypeElementProcessor();
                 case METHOD:
-                    processor = new ExecutableElementProcessor();
-                    break;
+                    return new ExecutableElementProcessor();
                 default:
                     throw new RuntimeException();
             }
-            return processor;
         });
     }
 }
